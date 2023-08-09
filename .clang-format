@@ -23,7 +23,7 @@ BreakBeforeBinaryOperators: All
 BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: 'true'
 BreakStringLiterals: 'true'
-ColumnLimit: '80'
+ColumnLimit: '76'
 CommentPragmas: '^ IWYU pragma:'
 ConstructorInitializerIndentWidth: '4'
 ContinuationIndentWidth: '4'
@@ -54,6 +54,6 @@ SpacesInCStyleCastParentheses: 'false'
 SpacesInContainerLiterals: 'false'
 Standard: Auto
 TabWidth: '4'
-UseTab: Never
+UseTab: ForIndentation
 
 ...
