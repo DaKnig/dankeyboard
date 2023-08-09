@@ -4,5 +4,5 @@ build:
 run: build
 	build/dankeyboard
 
-debug:
+debug: build
 	gdb build/dankeyboard

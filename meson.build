@@ -1,6 +1,6 @@
 project('dankeyboard', 'c',
   version : '0.1',
-  default_options : ['warning_level=3'])
+  default_options : ['c_std=gnu2x', 'warning_level=3'])
 
 gtkdep = dependency('gtk4')
 
