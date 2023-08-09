@@ -58,13 +58,12 @@ static void cb_activate(GtkApplication *app, gpointer _) {
 
 	char *config_dir;
 	int config_dir_len = asprintf(&config_dir, "%s/%s",
-	                              "/home/dudeguy/.config"
-	                              /* g_get_user_config_dir() */,
+	                              g_get_user_config_dir(),
 	                              PROJECT_NAME);
 	if (config_dir_len < 0) {
 		/* fprintf(stderr, "malloc."); */
 		g_error("malloc."); // kinda terminates.
-		unreachable();
+		__builtin_unreachable();
 	}
 	puts(config_dir);
 
@@ -72,7 +71,7 @@ static void cb_activate(GtkApplication *app, gpointer _) {
 	int config_fname_len = asprintf(&config_fname, "%s/config", config_dir);
 	if (config_fname_len < 0) {
 		g_error("malloc.");
-		unreachable();
+		__builtin_unreachable();
 	}
 
 	FILE *config;
@@ -83,8 +82,8 @@ static void cb_activate(GtkApplication *app, gpointer _) {
 		if (NULL != (config = fopen(config_fname, "w"))) {
 			// make a default simple qwerty layout
 			fprintf(config, "q w e r t y u i o p\n"
-			                "a s d f g h j k l\n"
-			                "z x c v b n m , .\n"
+			                " a s d f g h j k l\n"
+			                "   z x c v b n m\n"
 			                "\n");
 			// close and continue
 			fclose(config);
@@ -94,7 +93,7 @@ static void cb_activate(GtkApplication *app, gpointer _) {
 			/* g_error */ fprintf(stderr,
 			                      "could not create config file at %s!",
 			                      config_fname);
-			unreachable();
+			__builtin_unreachable();
 		}
 	}
 
@@ -153,7 +152,7 @@ static void cb_activate(GtkApplication *app, gpointer _) {
 			button_text = realloc(button_text, strlen(button_text));
 			if (NULL == button_text) {
 				g_error("malloc.");
-				unreachable();
+				__builtin_unreachable();
 			}
 
 			row.button_count = button_i + 1;
