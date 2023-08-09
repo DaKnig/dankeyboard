@@ -3,8 +3,9 @@ project('dankeyboard', 'c',
   default_options : ['c_std=gnu2x', 'warning_level=3'])
 
 gtkdep = dependency('gtk4')
+adwdep = dependency('libadwaita-1')
 
 exe = executable('dankeyboard', 'src/dankeyboard.c',
-                 dependencies: gtkdep, install : true)
+                 dependencies: [gtkdep, adwdep], install : true)
 
 test('basic', exe)

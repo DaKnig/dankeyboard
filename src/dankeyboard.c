@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 #include "renderer.h"
 
+#include <adwaita.h>
 #include <gtk/gtk.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -11,7 +12,7 @@
 #define PROJECT_NAME "dankeyboard"
 #define PROJECT_ID   "null.daknig.dankeyboard"
 
-static void cb_activate(GtkApplication *app, gpointer _);
+static void cb_activate(AdwApplication *app, gpointer _);
 
 typedef enum ButtonAction {
 	BUTTON_ACTION_INPUT_TEXT,
@@ -40,8 +41,8 @@ struct Layout {
 } layouts[10];
 
 int main(int argc, char **argv) {
-	GtkApplication *app;
-	app = gtk_application_new(PROJECT_ID, G_APPLICATION_DEFAULT_FLAGS);
+	AdwApplication *app;
+	app = adw_application_new(PROJECT_ID, G_APPLICATION_DEFAULT_FLAGS);
 	g_signal_connect(app, "activate", G_CALLBACK(cb_activate), NULL);
 
 	int status = g_application_run(G_APPLICATION(app), argc, argv);
@@ -50,7 +51,7 @@ int main(int argc, char **argv) {
 	return status;
 }
 
-static void cb_activate(GtkApplication *app, gpointer _) {
+static void cb_activate(AdwApplication *app, gpointer _) {
 	(void)_;
 	(void)app;
 
@@ -174,22 +175,37 @@ static void cb_activate(GtkApplication *app, gpointer _) {
 		}
 		puts("");
 	}
-	/*
 
-	GtkWidget *window = gtk_window_new();
-	gtk_window_set_default_size(GTK_WINDOW(window), 360, 294);
-	gtk_window_set_application(GTK_WINDOW(window), app);
+	GtkWidget *window = adw_application_window_new(GTK_APPLICATION(app));
+	/* gtk_window_set_default_size(GTK_WINDOW(window), 360, 294); */
 
 	GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 	gtk_widget_set_hexpand(box, TRUE);
 	gtk_widget_set_vexpand(box, TRUE);
-	gtk_window_set_child(GTK_WINDOW(window), box);
+	gtk_widget_set_size_request(box, 360, -1);
+	adw_application_window_set_content(ADW_APPLICATION_WINDOW(window), box);
 
-	GtkWidget *label = gtk_label_new("hello world!");
-	gtk_widget_set_hexpand(label, TRUE);
-	gtk_widget_set_vexpand(label, TRUE);
-	gtk_widget_set_parent(label, box);
+	// now make the keyboard. loop over row indexes...
+	for (int row_i = 0; row_i < layouts[0].row_count; row_i++) {
+		struct Row* row = &layouts[0].rows[row_i];
+		GtkWidget* row_widget = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+		gtk_widget_set_hexpand(row_widget, TRUE);
+		gtk_widget_set_halign(row_widget, GTK_ALIGN_CENTER);
+		gtk_box_append(GTK_BOX(box), row_widget);
+		// loop over button indexes...
+		for (int button_i = 0; button_i < row->button_count; button_i++) {
+			// if its a normal input button,
+			if (row->buttons[button_i].type == BUTTON_ACTION_INPUT_TEXT) {
+				GtkWidget *button = gtk_button_new_with_label(
+				    row->buttons[button_i].text);
+				// push it into the row
+				gtk_box_append(GTK_BOX(row_widget), button);
+
+			} else {
+				g_error("not supporting switching layout yet");
+			}
+		}
+	}
 
 	gtk_window_present(GTK_WINDOW(window));
-	*/
 }
