@@ -179,16 +179,20 @@ static void cb_activate(AdwApplication *app, gpointer _) {
 	GtkWidget *window = adw_application_window_new(GTK_APPLICATION(app));
 	/* gtk_window_set_default_size(GTK_WINDOW(window), 360, 294); */
 
-	GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+	GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 3);
 	gtk_widget_set_hexpand(box, TRUE);
 	gtk_widget_set_vexpand(box, TRUE);
 	gtk_widget_set_size_request(box, 360, -1);
+	gtk_widget_set_margin_top(box, 3);
+	gtk_widget_set_margin_bottom(box, 3);
+	gtk_widget_set_margin_start(box, 3);
+	gtk_widget_set_margin_end(box, 3);
 	adw_application_window_set_content(ADW_APPLICATION_WINDOW(window), box);
 
 	// now make the keyboard. loop over row indexes...
 	for (int row_i = 0; row_i < layouts[0].row_count; row_i++) {
 		struct Row* row = &layouts[0].rows[row_i];
-		GtkWidget* row_widget = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+		GtkWidget* row_widget = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3);
 		gtk_widget_set_hexpand(row_widget, TRUE);
 		gtk_widget_set_halign(row_widget, GTK_ALIGN_CENTER);
 		gtk_box_append(GTK_BOX(box), row_widget);
@@ -198,6 +202,8 @@ static void cb_activate(AdwApplication *app, gpointer _) {
 			if (row->buttons[button_i].type == BUTTON_ACTION_INPUT_TEXT) {
 				GtkWidget *button = gtk_button_new_with_label(
 				    row->buttons[button_i].text);
+				gtk_widget_remove_css_class(button, "text-button");
+
 				// push it into the row
 				gtk_box_append(GTK_BOX(row_widget), button);
 
